@@ -12,6 +12,6 @@ urlpatterns = patterns('',
     (r'^resources/',include('resources.urls')),
     (r'^results/$','resources.views.results',{'template_name':'resources/results.html'}, 'search_results'),
     (r'^profiles/', include('profiles.urls')),
-
+    (r'^sentry/', include('sentry.urls')),
 
 )
