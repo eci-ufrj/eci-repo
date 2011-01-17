@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Perfil</h1><br />
+<br />
+<p>Preencha seus dados iniciais ( não obrigatório ).</p>
+<form action="." method="post" enctype="multipart/form-data">
+{% csrf_token %}
+{% for field in form %}
+	<label>
+		<span>{{ field.label }}</span>  {{ field }} {% for error in field.errors %}<p class="error">{{ error }}</p>{% endfor %}
+	</label>
+	{% endfor %}
+<br /><br />
+<input type="submit" class ="submit"value="Atualizar" />
+</form>
+{% endblock %}

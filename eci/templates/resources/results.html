@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load resources_tags %}
+{% block content %}
+<h1>Resultados para: '{{ q }}'</h1>
+<br />
+<table id="box-table-a" summary="Materias">
+    <thead>
+    	<tr>
+        	<th scope="col">Arquivos</th>
+			<th scope="col">Qualidade</th>
+            <th scope="col">Período lecionado</th>
+            <th scope="col">Matéria</th>
+			<th scope="col">Colaborador</th>
+			<th scope="col">Downloads</th>
+			
+        </tr>
+    </thead>
+    <tbody>
+    	{% for r in results %}
+    	<tr>
+        	<td><a href="{{ r.get_absolute_url }}">{{ r.title }}</a></td>
+			<td>{{ r.nota }}</td>
+            <td>{{ r.l_period }}</td>
+            <td>{{ r.subject.name }}</td>
+			<td>{{ r.collaborator }}</td>
+			<td>{{ r.resource_hit.all.count }}</td>
+        </tr>
+		{% endfor %}
+    </tbody>
+</table>
+{% pagination_links request paginator %}
+
+{% endblock %}
+

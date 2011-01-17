@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% block content %}
+
+<h1>Matéria</h1>
+<br />
+<p><strong>Nome </strong>{{ subject.name }}</p>
+<p><strong>Nota </strong><span id="id_rate_value">{{ subject.nota }} </span>
+{% if not is_ratted %}
+<select name="rate" id="id_rate">
+<option value="5" selected="selected">Excelente( 5.0 )</option>
+<option value="4">Bom( 4.0 )</option>
+<option value="3">Razoável( 3.0 )</option>
+<option value="2">Ruim( 2.0 )</option>
+<option value="1">Péssimo( 1.0 )</option>
+</select> <input onclick="addRating('subject')" id="id_submit" type="button" value="Enviar" /></p>
+<input type="hidden" value="{{ subject.slug }}" id="id_slug" />
+{% endif %}
+<p><strong>Período </strong>{{ subject.get_period_display }}</p>
+<p><strong>Professor{{ subject.professor_set.all.count|pluralize:",es" }} </strong>{% for p in subject.professor_set.all %}<a href="{{ p.get_absolute_url }}">{{ p.name }}</a> {% endfor %}</p>
+<p><strong>Tipo </strong>Obrigatória</p>
+<p><strong>Info </strong>{{ subject.info }}</p>
+<table id="box-table-a" summary="Materias">
+    <thead>
+    	<tr>
+        	<th scope="col">Arquivos</th>
+            <th scope="col">Período lecionado</th>
+            <th scope="col">Downloads</th>
+			<th scope="col">Colaborador</th>
+        </tr>
+    </thead>
+    <tbody>
+    	{% for  r in resources %}
+    	<tr>
+        	<td><a href="{{ r.get_absolute_url }}">{{ r.title }}</a></td>
+            <td>{{ r.l_period }}</td>
+            <td>{{ r.resource_hit.all.count }}</td>
+			<td>{{ r.collaborator }}</td>
+        </tr>
+		{% endfor %}
+    </tbody>
+</table>
+<br />
+<h1>Comentários</h1> 
+		<br />
+		<div id="comments">
+			<div id="total_comments">
+			<span>    {{ comments.count }} Comentário{{ comments.count|pluralize:",s" }} para a matéria {{ subject.name }}</span>
+			</div>
+			{% for comment in comments %}
+			<div class="comment">
+				<hr><br />
+				<img src="{% if comment.author.get_profile.avatar %}{% thumbnail comment.author.get_profile.avatar 80x80 crop %}{% else %}{{ MEDIA_URL }}images/avatars/default_avatar.gif{% endif %}" />  {{ comment.author }} diz:
+				<p style="font-size:14px;color:#ff8040;">{{ comment.date_comment }}</p>
+				<div style="padding:15px 0 0 0;">{{ comment.comment|linebreaks }}</div>
+				
+			</div>
+			
+			{% endfor %}
+			<hr>
+			<br />
+			<div>
+				<form action="." method="post">
+					{% csrf_token %}
+					{% for field in comments_form %}
+					<label>
+						<span>Comentário:</span> {{ field }} {% for error in field.errors %}<p class="error">{{ error }}</p>{% endfor %}
+					</label>
+					{% endfor %}
+					<br />
+					<p><input type="submit" class="submit" value="Comentar"/></p>
+					<input type="hidden" value="comment" name="action"/>
+				</form>
+			</div>
+		</div><!-- #comments -->
+{% endblock %}

@@ -1,0 +1,7 @@
+<div id="professor_field">
+{% for field in form %}
+	<label>
+		<span>{{ field.label }}</span>  {{ field }} {% for error in field.errors %}<p class="error">{{ error }}</p>{% endfor %}
+	</label>
+	{% endfor %}
+</div>

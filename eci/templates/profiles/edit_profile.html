@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+
+{% block content %}
+<h1>Perfil</h1><br />
+<br />
+<p>Preencha seus dados ( não obrigatório ).</p>
+<p>Veja seu perfil público <a href="{{ user.get_profile.get_absolute_url }}">aqui</a>.</p>
+<form action="." method="post" enctype="multipart/form-data">
+{% csrf_token %}
+{% for field in form %}
+	<label>
+		<span>{{ field.label }}</span>  {{ field }} {% for error in field.errors %}<p class="error">{{ error }}</p>{% endfor %}
+	</label>
+	{% endfor %}
+<br /><br />
+<img src="{% thumbnail profile.avatar 80x80 crop %}" />
+<br /><br />
+<input type="submit" class ="submit"value="Atualizar" />
+
+</form>
+{% endblock %}

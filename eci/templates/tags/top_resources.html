@@ -1,0 +1,11 @@
+{% with top_resources as top %}
+<h4>TOP Downloads do mês</h4>
+			  <br />
+              <ol>
+              	{% if top %}
+              	{% for r in top %}
+                <li><a href="{{ r.get_absolute_url }}">{{ r.title }}</a>( {{ r.month_hits }} )</li>
+				{% endfor %}
+				{% endif %}
+              </ol>
+{% endwith %}

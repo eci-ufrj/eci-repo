@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Login</h1><br />
+
+<form method="post" action=".">
+{% csrf_token %}
+	{% if form.errors %}
+	<p class="error">Seu nome de usuário e/ou senha estão incorretos.</p>
+	{% endif %}
+	<label>
+		<span>Usuário</span>  <input id="id_username" type="text" name="username" class="text" maxlength="30" /> 
+	</label>
+	
+	<label>
+		<span>Senha</span>  <input type="password" class="text" name="password" id="id_password" /> 
+	</label>
+
+	<br /><br />
+	<input type="submit" class="submit" value="Enviar" />
+<input type="hidden" name="next" value="{{ next }}" />
+</form>
+
+{% endblock %}

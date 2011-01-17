@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Cadastro</h1><br />
+<form action="." method="post">
+{% csrf_token %}
+	{% for field in form %}
+	<label>
+		<span>{{ field.label }}</span>  {{ field }} {% for error in field.errors %}<p class="error">{{ error }}</p>{% endfor %}
+	</label>
+	{% endfor %}
+	<br /><br />
+	<input type="submit" class="submit" value="Enviar" />
+</form>
+{% endblock %}

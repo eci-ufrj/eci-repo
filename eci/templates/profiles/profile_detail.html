@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% block content %}
+
+<h1>Colaborador {% if profile.top %}<span style="color:#000080;">{{ profile.user.username }}</span> <img src="{{ MEDIA_URL }}images/star.png" alt="Top Colaborador" />{% else %} {{ profile.user.username }}{% endif %}</h1>
+
+<br /><br />
+<img src="{% if profile.avatar %}{% thumbnail profile.avatar 80x80 crop %}{% else %}{{ MEDIA_URL }}images/avatars/default_avatar.gif{% endif %}" />
+<br /><br />
+
+<p><strong>Nome </strong>{{ profile.nome }}</p>
+<p><strong>Ano </strong>{{ profile.get_year_display }}</p>
+<p><strong>Website </strong>{{ profile.url }}</p>
+<p><strong>Colaborações </strong>{{ profile.user.resource_collaborator.count }}</p>
+
+{% if profile.user.resource_collaborator.count %}
+<table id="box-table-a" summary="Materias">
+    <thead>
+    	<tr>
+        	<th scope="col">Recursos</th>
+            <th scope="col">Matéria</th>
+			<th scope="col">Período lecionado</th>
+			<th scope="col">Qualidade</th>		
+			<th scope="col">Downloads</th>	
+        </tr>
+    </thead>
+    <tbody>
+    	{% for r in profile.user.resource_collaborator.all %}
+    	<tr>
+        	<td><a href="{{ r.get_absolute_url }}">{{ r.title }}</a></td>
+			<td>{{ r.subject }}</td>
+            <td>{{ r.l_period }}</td>
+			<td>{{ r.nota }}</td>
+			<td>{{ r.resource_hit.all.count }}</td>
+			
+
+        </tr>
+		{% endfor %}
+    </tbody>
+</table>
+{% endif %}
+{% endblock %}

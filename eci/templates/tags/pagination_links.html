@@ -1,0 +1,19 @@
+{% if p.has_other_pages %}
+	<div id="pag">
+	{% if p.has_previous %}
+	<a href ="{{ request.path }}?{{ params }}&page={{ p.previous_page_number }}">
+		&laquo; Anterior
+	</a>
+	{% else %}
+	&laquo; Anterior
+	{% endif %}
+	| Página {{ p.number }} de {{ paginator.num_pages }} |
+	{% if p.has_next %}
+		<a href="{{ request.path }}?{{ params }}&page={{ p.next_page_number }}">
+			Próxima &raquo;
+		</a>
+	{% else %}
+		Próxima &raquo;
+	{% endif %}
+	</div>
+{% endif %}

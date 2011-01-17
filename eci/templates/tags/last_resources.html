@@ -1,0 +1,11 @@
+{% load filters %}
+{% with last_resources as last %}
+<h4>Últimas adições</h4>
+	{% for r in last %}
+				<div class="news-item">
+					<span class="date">{{ r.created }}</span><br />
+					<a href="{{ r.get_absolute_url }}">{{ r.title }}</a>: {{ r.info|truncate:40 }}
+                </div>
+	{% endfor %}
+
+{% endwith %}

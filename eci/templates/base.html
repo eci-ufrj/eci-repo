@@ -1,0 +1,121 @@
+{% load resources_tags %}
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Repositorio ECI</title>
+<link rel="stylesheet" href="{{ MEDIA_URL }}styles.css" type="text/css" />
+<script src="{{ MEDIA_URL }}js/jquery.min.js" type="text/javascript"></script>
+<script src="{{ MEDIA_URL }}js/common.js" type="text/javascript"></script>
+{% block script %}{% endblock %}
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="container-inner">
+
+	
+    
+   
+    
+    <div id="banner">
+    	<div id="user_box">
+			<span>Olá ,{% if user.is_authenticated %}<strong>{{ user.username }}</strong></span>
+			<br /><a href="/users/logout/">Sair..</a>
+			
+			{% else %}<strong>Visitante</strong></span>
+			<br /><a href="/users/login/">Logar..</a>
+			<br /><a href="/users/register/">Criar cadastro..</a>
+			{% endif %}
+		</div>
+		<a href="/index/">
+        <div id="slogan">
+        <p>Repositório de <span class="slogan-big"><strong>ECI</strong></span><br />
+		<span class="slogan-big"><strong>Engenharia de Computação e Informação</strong></span></p></div><!-- end slogan -->
+        </a>                                    
+   <div id="nav">
+    	<ul>
+        	<li><a href="/">Home</a></li>
+			{% if user.is_authenticated %}
+            <li><a href="/resources/subjects/">Matérias</a></li>
+            <li><a href="/resources/professors/">Professores</a></li>
+            <li><a href="/resources/add_resource/">Enviar Material</a></li>
+            <li><a href="/profiles/create/">Perfil</a></li>
+			<li><a href="/profiles/">Colaboradores</a></li>
+            <li><a href="#">Ajuda</a></li>
+			{% endif %}
+        </ul>
+    </div><!-- end nav -->
+	
+    </div><!-- end banner -->
+    
+
+    <div id="main">
+		<div id="content">
+			{% block content %}
+			<h2>Welcome to our website</h2>
+            <p>A clean professional free css template. It is suitable for all types of websites including businesses, organisations and personal sites.</p>
+          <p>It is released under the Creative Commons licence, which means you are free to use it, edit it or redistribute it as long as you keep the link at the bottom.</p>
+            <p>Photos are taken from stock.xchng.</p>
+          <p>Morbi nisl nibh, mollis id vulputate nec; tempus vel nibh. Suspendisse adipiscing volutpat purus et tempor. Mauris faucibus lacus quis nisl scelerisque bibendum! Sed interdum mattis augue quis elementum. Nullam suscipit nibh quis mi cursus ullamcorper! Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. </p>
+          <p>Proin viverra volutpat sem; a mollis tellus condimentum vitae. Aenean dictum posuere arcu, a facilisis nulla gravida non. Maecenas imperdiet neque id leo congue vitae tincidunt tellus porttitor. Donec lectus nibh, consectetur auctor luctus non, eleifend a nisi. </p>
+          <h3>What We Can Do For You:</h3>
+			<ul>
+                <li>Phasellus commodo dictum pellentesque</li>
+                <li>Integer eget turpis arcu</li>
+                <li>Nam pharetra felis a libero</li>
+                <li>Phasellus semper viverra</li>
+            </ul>
+		{% endblock %}
+        </div><!-- end content -->
+        {% if user.is_authenticated %}
+        <div class="sidebar">
+        <div class="sidebar-inner">
+        {% block sidebar1 %}
+        {% include 'tags/search_box.html' %}
+		{% endblock %} 
+        </div>
+		
+        <div class="sidebar-inner">
+        {% block sidebar2 %}
+        {% top_collaborators %}
+		{% endblock %} 
+        </div>
+        
+		<div class="sidebar-inner">
+        {% block sidebar3 %}
+        {% top_resources %}
+		{% endblock %} 
+        </div>
+		 
+         <div class="sidebar-inner">
+        {% block sidebar4 %} 
+         {% last_resources %}
+		 {% endblock %} 
+         </div> 
+         {% endif %}    
+              
+
+           
+        </div><!-- end sidebar -->
+        
+    	<div class="clear"></div>
+        
+    </div><!-- end main -->
+    
+    </div><!-- end container-inner -->
+    
+</div><!-- end container -->
+
+<div id="footer">
+	<p>&copy; YourSite 2010. Design by <a href="http://www.electrictowelrail.org.uk">Lee Elliott</a></p>
+	<p><i>Site desenvolvido em 2 dias com Django.</i></p>
+</div><!-- end footer -->
+
+<div style="text-align: center; font-size: 0.75em;">Design downloaded from <a href="http://www.freewebtemplates.com/">free website templates</a>.</div></body>
+</html>

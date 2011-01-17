@@ -1,0 +1,7 @@
+﻿Falta pouco para ativar sua conta no repositório ECI.
+
+Clique no link abaixo e seu cadastro estará completo:
+
+http://localhost:8001/users/{{ activation_key }}
+
+Aproveite!

@@ -1,0 +1,11 @@
+{% with top_collaborators as top %}
+<h4>TOP Colaboradores</h4>
+			  <br />
+              <ol>
+              	{% if top %}
+              	{% for c in top %}
+                <li><a href="{{ c.get_profile.get_absolute_url }}">{{ c.username }}</a>( {{ c.resource_collaborator.all.count }} )</li>
+				{% endfor %}
+				{% endif %}
+              </ol>
+{% endwith %}

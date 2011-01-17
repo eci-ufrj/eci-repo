@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Enviar material</h1>
+<form action="." method="post" enctype="multipart/form-data">
+	{% csrf_token %}
+	{% for field in form %}
+	<label>
+		<span>{{ field.label }}{% if field.field.required %}<span class="req">**</span>{% endif %}</span>  {{ field }} {% for error in field.errors %}<p class="error">{{ error }}</p>{% endfor %}
+	</label>
+	{% endfor %}
+	<input type="submit" class="submit" value="Enviar" />
+</form>
+	
+{% endblock %}
