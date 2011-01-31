@@ -18,8 +18,8 @@
     <tbody>
     	{% for p in object_list %}
     	<tr>
-        	<td><a href="{{ p.get_absolute_url }}">{{p.user.username }}</a></td>
-			<td>{{ p.name }}</td>
+        	<td><a {% if p.user.is_staff %}style="color:Red;"{% endif %} href="{{ p.get_absolute_url }}">{{p.user.username }}</a></td>
+			<td>{{ p.nome }}</td>
             <td>{{ p.get_year_display }}</td>
 			<td>{{ p.url }}</td>
 			<td>{{ p.user.resource_collaborator.all.count }}</td>

@@ -16,6 +16,9 @@ from django.template.loader import render_to_string
 from django.core.servers.basehttp import FileWrapper
 from django import forms
 from django.http import Http404
+import os, tempfile, zipfile
+import StringIO
+import codecs
 
 @login_required
 def show_subject(request,subject_slug,template_name="resources/subject.html"):
@@ -232,11 +235,20 @@ def download(request, resource_slug):
     if r.deleted:
         raise Http404
     ext = r.file.name.split('.')[-1]
-    download = open(r.file.path)
+    file = open(r.file.path,'r+')
+    #file = open(r.file.file)
+    #content = file.read()
+    length = os.path.getsize(r.file.path)
+    
     if not Hit.objects.filter(resource=r,user=request.user):
         r.resource_hit.create(user=request.user)
-    wrapper = FileWrapper(download)
-    response = HttpResponse(wrapper, content_type='application/'+ext)
-    response['Content-Disposition'] = 'attachment; filename=' + r.file.name
-    response['Content-Length'] = download.tell()  
+    
+    wrapper = FileWrapper(file)
+    filename = r.file.name.split('/')[-1]
+    import mimetypes
+    mime = mimetypes.guess_type(filename)
+    response = HttpResponse(r.file.file, mimetype=mime[0])
+    
+    response['Content-Disposition'] = 'attachment; filename=' + filename
+    response['Content-Length'] = length 
     return response

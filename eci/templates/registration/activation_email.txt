@@ -1,7 +1,9 @@
-﻿Falta pouco para ativar sua conta no repositório ECI.
+﻿Falta pouco para a ativação da sua conta no Repositório ECI!
 
-Clique no link abaixo e seu cadastro estará completo:
+Para ter acesso a todas as funcionalidades do site, é preciso permissão de cadastro por um dos administradores.
 
-http://localhost:8001/users/{{ activation_key }}
+Aguarde que tudo dará certo.
 
-Aproveite!
+Att,
+
+Equipe Repositório ECI

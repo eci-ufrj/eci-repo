@@ -8,7 +8,7 @@
 <p><strong>Título </strong>{{ resource.title }}</p>
 <p><strong>Arquivo </strong>{{ resource.get_file_display }}</p>
 <p><strong>Tamanho </strong>{{ resource.file.size|kbyte }}</p>
-<p><strong>Colaborador </strong><a href="{{ resource.collaborator.get_profile.get_absolute_url }}">{{ resource.collaborator.username }}</a></p>
+<p><strong>Colaborador </strong><a {% if resource.collaborator.is_staff %}style="color:Red;"{% endif %} href="{{ resource.collaborator.get_profile.get_absolute_url }}">{{ resource.collaborator.username }}</a></p>
 <p><strong>Nota </strong><span id="id_rate_value">{{ resource.nota }} </span>
 {% if not is_ratted %}
 <select name="rate" id="id_rate">
@@ -38,7 +38,7 @@
 			{% for comment in comments %}
 			<div class="comment">
 				<hr><br />
-				<img src="{% if comment.author.get_profile.avatar %}{% thumbnail comment.author.get_profile.avatar 80x80 crop %}{% else %}{{ MEDIA_URL }}images/avatars/default_avatar.gif{% endif %}" />  {{ comment.author }} diz:
+				<img src="{% if comment.author.get_profile.avatar %}{% thumbnail comment.author.get_profile.avatar 80x80 crop %}{% else %}{{ MEDIA_URL }}images/avatars/default_avatar.gif{% endif %}" />{% if comment.author.get_profile.url %}<a {% if comment.author.is_staff %}style="color:Red;"{% endif %} href="{{ comment.author.get_profile.url }}">{{ comment.author }}</a>{% else %}{{ comment.author }}{% endif %} diz:
 				<p style="font-size:14px;color:#ff8040;">{{ comment.date_comment }}</p>
 				<div style="padding:15px 0 0 0;">{{ comment.comment|linebreaks }}</div>
 				

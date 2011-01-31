@@ -2,7 +2,7 @@ import os
 PROJECT_DIR = os.path.dirname(__file__)
 p = lambda filename : os.path.join(PROJECT_DIR,filename)
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -90,6 +90,14 @@ LOGIN_URL = '/users/login/'
 LOGIN_REDIRECT_URL = '/'
 PRODUCTS_PER_PAGE = 12
 AUTH_PROFILE_MODULE ='resources.Profile'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'no-reply@inoa.com.br'
+EMAIL_HOST_PASSWORD = 'variola12'
+DEFAULT_FROM_EMAIL = 'contato@eci.inoa.com.br'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -101,8 +109,4 @@ INSTALLED_APPS = (
     'resources',
     'profiles',
     'easy_thumbnails',
-    'sentry',
-    'sentry.client',
-    'indexer',
-    'paging',
 )

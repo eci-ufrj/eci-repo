@@ -10,6 +10,9 @@ from django.contrib import admin
 from django.db.models.signals import post_save
 from django.db.models import Count
 
+
+
+
 class Period(models.Model):
     title = models.CharField('Período',max_length='20',default='Não informado')
     
@@ -282,7 +285,7 @@ class Profile(models.Model):
     
     user = models.ForeignKey(User, unique=True)
     nome = models.CharField('Nome',max_length='40',blank=True)
-    url = models.URLField('Website',blank=True,null=True)
+    url = models.URLField('Website',blank=True)
     year = models.IntegerField(choices = YEAR_CHOICES,default = 7,verbose_name="Ano de ingresso")
     avatar = models.ImageField(upload_to='images/avatars/',blank=True)
     

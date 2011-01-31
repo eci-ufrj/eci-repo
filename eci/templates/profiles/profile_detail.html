@@ -2,7 +2,7 @@
 {% load thumbnail %}
 {% block content %}
 
-<h1>Colaborador {% if profile.top %}<span style="color:#000080;">{{ profile.user.username }}</span> <img src="{{ MEDIA_URL }}images/star.png" alt="Top Colaborador" />{% else %} {{ profile.user.username }}{% endif %}</h1>
+<h1>Colaborador <span {% if profile.user.is_staff %}style="color:Red;"{% endif %}>{{ profile.user.username }}</span> {% if profile.top %}<img src="{{ MEDIA_URL }}images/star.png" alt="Top Colaborador" />{% endif %}</h1>
 
 <br /><br />
 <img src="{% if profile.avatar %}{% thumbnail profile.avatar 80x80 crop %}{% else %}{{ MEDIA_URL }}images/avatars/default_avatar.gif{% endif %}" />

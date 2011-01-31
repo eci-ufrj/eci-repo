@@ -4,7 +4,7 @@
               <ol>
               	{% if top %}
               	{% for c in top %}
-                <li><a href="{{ c.get_profile.get_absolute_url }}">{{ c.username }}</a>( {{ c.resource_collaborator.all.count }} )</li>
+                <li><a {% if c.is_staff %}style="color:Red;"{% endif %} href="{{ c.get_profile.get_absolute_url }}">{{ c.username }}</a>( {{ c.resource_collaborator.all.count }} )</li>
 				{% endfor %}
 				{% endif %}
               </ol>
