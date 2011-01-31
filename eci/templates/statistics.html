@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% block script %}
+<script type="text/javascript">
+ 
+ /**
+ * Initiates Graph Functions
+ **/
+ function graphit($graph_id,$lines,$bar_margins,$bar_speed,$animate){
+ 
+ $v = new Object(); // create graph object
+ $v.graphid = $graph_id; // id of graph container, example "graph1" or "myGraph"
+ $v.values = new Array(); // array of values
+ $v.heights = new Array(); // array of bar heights
+ $v.colors = new Array(); // colors for bars
+ $v.lines = $lines; // number of lines - keep this 10 unless you want to write a bunch more code
+ $v.bm = $bar_margins; // margins between the bars
+ $v.mx = 0; // highest number, or rounded up number
+ $v.gw = $('#'+$v.graphid+' .graph').width(); // graph width
+ $v.gh = $('#'+$v.graphid+' .graph').height(); // graph height
+ $v.speed = $bar_speed; // speed for bar animation in milliseconds
+ $v.animate = $animate; // determines if animation on bars are run, set to FALSE if multiple charts
+ 
+ getValues(); // load the values & colors for bars into $v object
+ graphLines(); // makes the lines for the chart
+ graphBars(); // make the bars
+ if($v.animate)
+ animateBars(0); // animate and show the bars
+ }
+ 
+ /**
+ * Makes the HTML for the lines on the chart, and places them into the page.
+ **/
+ function graphLines(){
+ $r = ($v.mx < 100)?10:100; // determine to round up to 10 or 100
+ $v.mx = roundUp($v.mx,$r); // round up to get the max number for lines on chart
+ $d = $v.mx / $v.lines; // determines the increment for the chart line numbers    
+ 
+ // Loop through and create the html for the divs that will make up the lines & numbers
+ $html = ""; $i = $v.mx;
+ if($i>0 && $d>0){
+ while($i >= 0){
+ $html += graphLinesHelper($i, $v.mx);
+ $i = $i - $d;
+ }
+ }
+ $('#'+$v.graphid+' .graph').html($html); // Put the lines into the html
+ $margin = $v.gh / $v.lines; // Determine the margin size for line spacing
+ $('#'+$v.graphid+' .line').css("margin-bottom",$margin + "px");    // Add the margins to the lines
+ }
+ 
+ /**
+ * Creates the html for the graph lines and numbers
+ **/
+ function graphLinesHelper($num, $maxNum){
+ $fix = ($i == $maxNum || $i == 0)? "fix ":""; // adds class .fix, which removes the "border" for top and bottom lines
+ return "<div class='"+$fix+"line'><span>" + $num + "</span></div>";
+ }
+ 
+ /**
+ * A Simple Round Up Function
+ **/
+ function roundUp($n,$r){
+ return (($n%$r) > 0)?$n-($n%$r) + $r:$n;
+ }
+ 
+ /**
+ * Gets the values & colors from the HTML <labels> and saves them into $v ohject
+ **/
+ function getValues(){
+ $lbls = $('#'+$v.graphid+' .values span'); // assigns the span DOM object to be looped through
+ // loop through
+ for($i=0;$i <= $lbls.length-1; $i++){
+ $vals = parseFloat($lbls.eq($i).text());
+ $v.colors.push($lbls.eq($i).css('background-color'));
+ $v.mx = ($vals > $v.mx)?$vals:$v.mx;
+ $v.values.push($vals);
+ }
+ }
+ 
+ /**
+ * Creates the HTML for the Bars, adds colors, widths, and margins for proper spacing.
+ * Then Puts it on the page.
+ **/
+ function graphBars(){
+ $xbars  = $v.values.length; // number of bars
+ $barW    = ($v.gw-($xbars * ($v.bm))) / $xbars;
+ $mL     = ($('#'+$v.graphid+' .line span').width()) + ($v.bm/2);
+ $html="";
+ for($i=1;$i<=$xbars;$i++){
+ $v.heights.push(($v.gh / $v.mx) * $v.values[$i-1]);
+ $ht = ($v.animate == true)?0:$v.heights[$i-1];
+ $html += "<div class='bar' id='"+$v.graphid+"_bar_"+($i-1)+"' style='height: "+$ht+"px; margin-top: -"+($ht+1)+"px; ";
+ $html += "background-color: "+$v.colors[$i-1]+"; margin-left: "+$mL+"px'>&nbsp;</div>";
+ $mL = $mL + $barW + $v.bm;
+ }
+ $($html).insertAfter('#'+$v.graphid+' .graph');
+ $('#'+$v.graphid+' .bar').css("width", $barW + "px");
+ }
+ 
+ /**
+ * Animates the Bars to the correct heights.
+ **/
+ function animateBars($i){
+ if($i == $v.values.length){ return; }
+ $('#'+$v.graphid+'_bar_'+$i).animate({
+ marginTop: "-" + ($v.heights[$i] + 1) + "px",
+ height: ($v.heights[$i]) + "px"
+ },$v.speed,"swing", function(){animateBars($i+1); });
+ }
+ 
+</script>
+{% endblock %}
+
+{% block content %}
+<script type="text/javascript">
+ $(document).ready(function(){
+ $graph_id    = 'graph1'; // id of graph container
+ $lines          = 10; // number of lines - keep this 10 unless you want to write a bunch more code
+ $bar_margins = 30; // margins between the bars
+ $bar_speed      = 500; // speed for bar animation in milliseconds
+ $animate      = true; // set to false if multiple charts on one page
+ graphit($graph_id,$lines,$bar_margins,$bar_speed, $animate);
+ });
+</script>
+
+<h1>Estatísticas</h1><br />
+<p>Nesta seção conterão alguns dados estatísticos sobre o Repositório.</p>
+<p>Veja as matérias mais populares (recursos X matéria) :</p>
+<table id="graph1" class="graphtable">
+ <tr>
+ <td>
+ <div class="gCont">   <div class="graph"></div>   </div>
+ </td>
+ </tr>
+ <tr>
+ <td class="values">
+ <label>{{ subjects.0.name }}:<span style="background-color: #06F;">{{ subjects.0.count }}</span></label>
+ <label>{{ subjects.1.name }}:<span style="background-color: #C60;">{{ subjects.1.count }}</span></label>
+ <label>{{ subjects.2.name }}:<span style="background-color: #936;">{{ subjects.2.count }}</span></label>
+ <label>{{ subjects.3.name }}:<span style="background-color: #96C;">{{ subjects.3.count }}</span></label>
+ <label>{{ subjects.4.name }}:<span style="background-color: #396;">{{ subjects.4.count }}</span></label>
+ </td>
+ </tr>
+ 
+</table>
+{% endblock %}
