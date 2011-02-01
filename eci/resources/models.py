@@ -324,24 +324,24 @@ def on_user_register(sender, **kwargs):
     
     if kwargs['created']:
         
-        ctx_dict = {}
-        subject = render_to_string('registration/activation_email_subject.txt',
-                                   ctx_dict)
-        # Email subject *must not* contain newlines
-        subject = ''.join(subject.splitlines())
-        
-        message = render_to_string('registration/activation_email.txt',
-                                   ctx_dict)
-        
-        
         user = kwargs['instance']
-        user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
         profile = Profile()
         try:
             user.get_profile()
         except:
             profile.user = user
             profile.save()
+            ctx_dict = {}
+            subject = render_to_string('registration/activation_email_subject.txt',
+                                       ctx_dict)
+            # Email subject *must not* contain newlines
+            subject = ''.join(subject.splitlines())
+            
+            message = render_to_string('registration/activation_email.txt',
+                                       ctx_dict)
+            user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
+        
+        
 
         
 post_save.connect(on_user_register, User)
