@@ -6,7 +6,7 @@ from django.contrib.auth.models import *
 from django.core.mail import send_mail
 from settings import DEFAULT_FROM_EMAIL
 class UserAdmin(admin.ModelAdmin):
-    list_display =('email','is_active','last_login','date_joined','is_staff',)
+    list_display =('username','email','is_active','last_login','date_joined','is_staff',)
     actions = ['ativar_usuarios','desativar_usuarios']
     
     def ativar_usuarios(self, request, queryset):
@@ -19,7 +19,7 @@ class UserAdmin(admin.ModelAdmin):
             if old_activation_status.__contains__(user.username):
                 if old_activation_status[user.username] == user.is_active:
                     send_mail('Repositório ECI - Sua conta foi aceita!',
-                              'Parabéns!\nSua conta foi aceita pela moderação do site.\nAproveite para personalizar seu perfil agora em : eci.inoa.com.br/profiles/edit/\nAtt,\nEquipe Repositório ECI',
+                              'Parabéns!\n\nSua conta foi aceita pela administração do site.\nAproveite para personalizar seu perfil agora em : eci.inoa.com.br/profiles/edit/\n\nAtt,\nEquipe Repositório ECI',
                                DEFAULT_FROM_EMAIL,
                                [user.email], fail_silently=True)
 
