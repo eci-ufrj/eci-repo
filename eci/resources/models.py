@@ -9,7 +9,7 @@ from eci import settings
 from django.contrib import admin
 from django.db.models.signals import post_save
 from django.db.models import Count
-
+from django.template.loader import render_to_string
 
 
 
@@ -323,7 +323,19 @@ def on_user_register(sender, **kwargs):
     '''Create a profile for new users.'''
     
     if kwargs['created']:
+        
+        ctx_dict = {}
+        subject = render_to_string('registration/activation_email_subject.txt',
+                                   ctx_dict)
+        # Email subject *must not* contain newlines
+        subject = ''.join(subject.splitlines())
+        
+        message = render_to_string('registration/activation_email.txt',
+                                   ctx_dict)
+        
+        
         user = kwargs['instance']
+        user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
         profile = Profile()
         try:
             user.get_profile()
