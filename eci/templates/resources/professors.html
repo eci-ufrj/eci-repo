@@ -9,6 +9,7 @@
         	<th scope="col">Professores</th>
 			<th scope="col">Qualidade</th>
             <th scope="col">Matérias</th>
+			<th scrop="col">Comentários</th>
 			<th scope="col">Arquivos</th>
 			
         </tr>
@@ -19,6 +20,7 @@
         	<td><a href="{{ p.get_absolute_url }}">{{ p.name }}</a></td>
 			<td>{{ p.nota }}</td>
             <td>{{ p.professor_subjects.all.count }}</td>
+			<td>{{ p.comments_set.all.count }}</td>
 			<td>{{ p.resource_set.all.count }}</td>
 
         </tr>

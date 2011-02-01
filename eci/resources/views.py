@@ -51,7 +51,7 @@ def show_subject(request,subject_slug,template_name="resources/subject.html"):
             comments_form = CommentsForm(request.POST)
             if comments_form.is_valid():
                 comments_form.save(user=request.user,subject=subject)
-    comments= Comments.objects.filter(subject=subject).order_by('date_comment')
+    comments= Comments.objects.filter(subject=subject).order_by('-date_comment')
     comments_form = CommentsForm()
     return render_to_response(template_name,locals(),context_instance=RequestContext(request))
 
@@ -86,7 +86,7 @@ def show_professor(request,professor_slug,template_name="resources/professor.htm
             comments_form = CommentsForm(request.POST)
             if comments_form.is_valid():
                 comments_form.save(user=request.user,professor=professor)
-    comments= Comments.objects.filter(professor=professor).order_by('date_comment')
+    comments= Comments.objects.filter(professor=professor).order_by('-date_comment')
     comments_form = CommentsForm()
     return render_to_response(template_name,locals(),context_instance=RequestContext(request))
 
@@ -127,7 +127,7 @@ def show_resource(request,resource_slug,template_name="resources/resource.html")
             comments_form = CommentsForm(request.POST)
             if comments_form.is_valid():
                 comments_form.save(user=request.user,resource = resource)
-    comments= Comments.objects.filter(resource=resource).order_by('date_comment')
+    comments= Comments.objects.filter(resource=resource).order_by('-date_comment')
     comments_form = CommentsForm()
     
     page_title = resource.title

@@ -10,7 +10,7 @@ from django.contrib import admin
 from django.db.models.signals import post_save
 from django.db.models import Count
 from django.template.loader import render_to_string
-
+import utils
 
 
 class Period(models.Model):
@@ -98,7 +98,8 @@ class Professor(models.Model):
     
     class Meta:
         db_table='professor'
-        verbose_name = 'Professores'
+        verbose_name = 'Professor'
+        verbose_name_plural = 'Professores'
     
     def __unicode__(self):
         return self.name
@@ -191,12 +192,17 @@ class Resource(models.Model):
         if not self.id:
             unique = False
             self.slug = slugify(self.title)
+            self.file.name=utils.remover_acentos(self.file.name)
             while not unique:
                 try:
                     Resource.objects.get(slug=self.slug)
                     self.slug+='_'
                 except:
                     unique=True
+        if self.id:
+            r = Resource.objects.get(id=self.id)
+            if self.file != r.file:
+                self.file.name=remover_acentos(self.file.name)
         super(Resource, self).save(*args, **kwargs)    
         
     @models.permalink
@@ -317,7 +323,11 @@ class Comments(models.Model):
     date_comment = models.DateTimeField('Dia e hora',auto_now_add=True)
 
     def __unicode__(self):
-        return 'Comentário de '+self.author.username+' as '+unicode(self.date_comment)
+        return unicode('Comentário de ')+unicode(self.author.username)+unicode(' as ')+unicode(self.date_comment)
+    
+    class Meta:
+        verbose_name = "Comentário"
+        verbose_name_plural = "Comentários"
     
 def on_user_register(sender, **kwargs):
     '''Create a profile for new users.'''
@@ -331,15 +341,16 @@ def on_user_register(sender, **kwargs):
         except:
             profile.user = user
             profile.save()
-            ctx_dict = {}
-            subject = render_to_string('registration/activation_email_subject.txt',
-                                       ctx_dict)
-            # Email subject *must not* contain newlines
-            subject = ''.join(subject.splitlines())
-            
-            message = render_to_string('registration/activation_email.txt',
-                                       ctx_dict)
-            user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
+            if settings.DEBUG==True:
+                ctx_dict = {}
+                subject = render_to_string('registration/activation_email_subject.txt',
+                                           ctx_dict)
+                # Email subject *must not* contain newlines
+                subject = ''.join(subject.splitlines())
+                
+                message = render_to_string('registration/activation_email.txt',
+                                           ctx_dict)
+                user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
         
         
 

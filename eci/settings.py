@@ -2,7 +2,7 @@ import os
 PROJECT_DIR = os.path.dirname(__file__)
 p = lambda filename : os.path.join(PROJECT_DIR,filename)
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (

@@ -332,7 +332,7 @@ span.required {
 {
 	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
 	font-size: 15px;
-	width: 580px;
+	width: 680px;
 	text-align: left;
 	border-collapse: collapse;
 }
@@ -425,6 +425,10 @@ input.submit {
     padding: 8px 20px;
 	font-size:20px;
 }
+
+.submit:hover{
+	background-color:#0080c0;
+}
 .error{
 	color:Red;
 }
@@ -457,6 +461,10 @@ hr{
     padding: 8px 20px;
 	width:100px;
 	text-decoration:none;
+}
+.downloadLink:hover{
+	background-color:#0080c0;
+	color:White;
 }
 /* graph test */
 .graphtable td { vertical-align: top; font-family: Arial, Helvetica, sans-serif; }

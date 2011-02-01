@@ -12,6 +12,7 @@
 			<th scope="col">Tipo</th>
             <th scope="col">Arquivos</th>
 			<th scope="col">Professores</th>
+			<th scope="col">Comentários</th>
 			
         </tr>
     </thead>
@@ -24,6 +25,7 @@
 			<td>Obrigatória</td>
             <td>{{ s.resource_set.all.count }}</td>
 			<td>{{ s.professor_set.all.count }}</td>
+			<td>{{ s.comments_set.all.count }}</td>
         </tr>
 		{% endfor %}
     </tbody>

@@ -27,6 +27,7 @@
             <th scope="col">Período lecionado</th>
             <th scope="col">Downloads</th>
 			<th scope="col">Colaborador</th>
+			<th scope="col">Comentários</th>
         </tr>
     </thead>
     <tbody>
@@ -36,6 +37,7 @@
             <td>{{ r.l_period }}</td>
             <td>{{ r.resource_hit.all.count }}</td>
 			<td>{{ r.collaborator }}</td>
+			<td>{{ r.comments_set.all.count }}</td>
         </tr>
 		{% endfor %}
     </tbody>

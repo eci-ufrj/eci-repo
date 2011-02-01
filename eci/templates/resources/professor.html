@@ -23,7 +23,8 @@
     	<tr>
         	<th scope="col">Matérias</th>
             <th scope="col">Período</th>
-            <th scope="col">Recursos</th>
+			<th scope="col">Recursos</th>
+            <th scope="col">Comentários</th>
         </tr>
     </thead>
     <tbody>
@@ -32,6 +33,7 @@
         	<td><a href="{{ s.get_absolute_url }}">{{ s.name }}</a></td>
             <td>{{ s.period }}</td>
             <td>{{ s.resource_set.all.count }}</td>
+			<td>{{ s.comments_set.all.count }}</td>
         </tr>
 		{% endfor %}
     </tbody>
