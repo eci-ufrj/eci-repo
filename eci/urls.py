@@ -17,5 +17,6 @@ urlpatterns = patterns('',
     (r'^profiles/', include('profiles.urls')),
     (r'^help/',direct_to_template,{'template':'help.html'}),
     (r'^statistics/','views.statistics',{'template_name':'statistics.html'},'statistics'),
+    (r'^sentry/', include('sentry.urls')),
 
 )

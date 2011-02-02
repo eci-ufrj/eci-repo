@@ -193,6 +193,7 @@ class Resource(models.Model):
             unique = False
             self.slug = slugify(self.title)
             self.file.name=utils.remover_acentos(self.file.name)
+            self.file._file._name=utils.remover_acentos(self.file.name)
             while not unique:
                 try:
                     Resource.objects.get(slug=self.slug)

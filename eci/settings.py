@@ -109,4 +109,8 @@ INSTALLED_APPS = (
     'resources',
     'profiles',
     'easy_thumbnails',
+    'sentry',
+    'sentry.client',
+    'indexer',
+    'paging',
 )
