@@ -186,6 +186,7 @@ def results(request,template_name="resources.html"):
 def add_resource(request,template_name="resource_form.html"):
     form = ResourceForm()
     if request.method=='POST':
+        request.FILES['file']._name = utils.remover_acentos(request.FILES['file']._name)
         form = ResourceForm(request.POST,request.FILES)
         if form.is_valid():
             new = form.save(commit=False)
