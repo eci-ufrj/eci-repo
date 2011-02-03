@@ -14,6 +14,7 @@ from django.http import HttpResponse
 from django.utils import simplejson
 from django.template.loader import render_to_string
 from django.core.servers.basehttp import FileWrapper
+from django.template.defaultfilters import slugify
 from django import forms
 from django.http import Http404
 import os, tempfile, zipfile
@@ -192,7 +193,7 @@ def add_resource(request,template_name="resource_form.html"):
         #    pass
 
         #value = unicode(request.FILES['file']._name,'utf-8')
-        request.FILES['file']._name = utils.asciize(request.FILES['file']._name)
+        request.FILES['file']._name = slugify(request.FILES['file']._name)
         form = ResourceForm(request.POST,request.FILES)
         if form.is_valid():
             new = form.save(commit=False)
