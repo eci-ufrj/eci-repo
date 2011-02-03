@@ -193,7 +193,10 @@ def add_resource(request,template_name="resource_form.html"):
         #    pass
 
         #value = unicode(request.FILES['file']._name,'utf-8')
-        request.FILES['file']._name = slugify(request.FILES['file']._name)
+        import unicodedata
+        value = unicodedata.normalize('NFKD', request.FILES['file']._name).encode('ascii', 'ignore')
+        request.FILES['file']._name = value
+        #request.FILES['file']._name = slugify(request.FILES['file']._name)
         form = ResourceForm(request.POST,request.FILES)
         if form.is_valid():
             new = form.save(commit=False)
