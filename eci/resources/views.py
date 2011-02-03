@@ -186,16 +186,13 @@ def results(request,template_name="resources.html"):
 def add_resource(request,template_name="resource_form.html"):
     form = ResourceForm()
     if request.method=='POST':
-        try:
-            value = unicode(request.FILES['file']._name, "ascii")
-        except UnicodeError:
-            value = unicode(request.FILES['file']._name, "utf-8")
-        else:
-            # value was valid ASCII data
-            pass
+        #try:
+        #    value = unicode(request.FILES['file']._name, "utf-8")
+        #except UnicodeError:
+        #    pass
 
         #value = unicode(request.FILES['file']._name,'utf-8')
-        request.FILES['file']._name = utils.remover_acentos(value)
+        request.FILES['file']._name = utils.asciize(request.FILES['file']._name)
         form = ResourceForm(request.POST,request.FILES)
         if form.is_valid():
             new = form.save(commit=False)

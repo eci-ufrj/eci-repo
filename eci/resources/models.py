@@ -192,18 +192,18 @@ class Resource(models.Model):
         if not self.id:
             unique = False
             self.slug = slugify(self.title)
-            self.file.name=utils.remover_acentos(self.file.name)
-            self.file._file._name=utils.remover_acentos(self.file.name)
+            #self.file.name=utils.remover_acentos(self.file.name)
+            #self.file._file._name=utils.remover_acentos(self.file.name)
             while not unique:
                 try:
                     Resource.objects.get(slug=self.slug)
                     self.slug+='_'
                 except:
                     unique=True
-        if self.id:
-            r = Resource.objects.get(id=self.id)
-            if self.file != r.file:
-                self.file.name=remover_acentos(self.file.name)
+        #if self.id:
+        #    r = Resource.objects.get(id=self.id)
+        #    if self.file != r.file:
+        #        self.file.name=remover_acentos(self.file.name)
         super(Resource, self).save(*args, **kwargs)    
         
     @models.permalink
