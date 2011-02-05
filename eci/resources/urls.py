@@ -11,6 +11,8 @@ urlpatterns = patterns('eci.resources.views',
                        (r'^add_subject_rating/$','add_rating',{'object':Subject},'resources_add_rating'),
                        (r'^add_professor_rating/$','add_rating',{'object':Professor},'resources_add_rating'),
                        (r'^add_resource_professor/$','add_resource_professor',{},'resources_add_resource_professor'),
+                       (r'^add_professor/$','add_professor',{},'resources_add_professor'),
+                       (r'^check_professor/$','check_professor',{},'resources_check_professor'),
                        (r'^download/(?P<resource_slug>[-\w]+)/$','download',{},'resources_download'),
                        
                        )

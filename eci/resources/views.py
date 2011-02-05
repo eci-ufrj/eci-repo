@@ -171,7 +171,7 @@ def results(request,template_name="resources.html"):
         resources = resources.filter(Q(title__icontains=word)|
                                      Q(l_period__title__icontains=word)|
                                      Q(subject__name__icontains=word)|
-                                     Q(subject__professor__name__icontains=word))
+                                     Q(subject__professor__name__icontains=word)).distinct()
     
     
     paginator = Paginator(resources,settings.PRODUCTS_PER_PAGE)
@@ -186,35 +186,28 @@ def results(request,template_name="resources.html"):
 @login_required
 def add_resource(request,template_name="resource_form.html"):
     form = ResourceForm()
+    professor_form = ProfessorForm()
     if request.method=='POST':
-        #try:
-        #    value = unicode(request.FILES['file']._name, "utf-8")
-        #except UnicodeError:
-        #    pass
-
-        #value = unicode(request.FILES['file']._name,'utf-8')
         import unicodedata
-        value = unicodedata.normalize('NFKD', request.FILES['file']._name).encode('ascii', 'ignore')
-        request.FILES['file']._name = value
-        #request.FILES['file']._name = slugify(request.FILES['file']._name)
+        if request.FILES.__contains__('file'):
+            value = unicodedata.normalize('NFKD', request.FILES['file']._name).encode('ascii', 'ignore')
+            request.FILES['file']._name = value
+
         form = ResourceForm(request.POST,request.FILES)
         if form.is_valid():
             new = form.save(commit=False)
             new.collaborator = request.user
-            try:
-                period = Period.objects.get(title='Não Informado')
-                
-            except:
-                period = Period.objects.create()
-            new.l_period = period
+            if not new.l_period:
+                try:
+                    new.l_period = Period.objects.get(title='Não Informado');
+                except:
+                    period = Period.objects.create()
             if request.POST.get('professor'):
                 new.professor = Professor.objects.get(id = request.POST.get('professor'))
             new.save()
             url = urlresolvers.reverse('resources_resource', args=[new.slug])
             return HttpResponseRedirect(url)
     return render_to_response(template_name,locals(),context_instance=RequestContext(request))
-
-
 
 @login_required
 def add_rating(request,object):
@@ -239,6 +232,67 @@ def add_resource_professor(request):
         response = simplejson.dumps({'succes':'False'})
     return HttpResponse(response, content_type = 'aplication/javascript; charset=utf8')
 
+def add_professor(request):
+    subject = get_object_or_404(Subject,id=request.POST.get('subject'))
+    ctx= {}
+    # case 1: professor already exists. we check whether the user has messed up, if not we add the professor to the current subject.
+    if request.POST.get('professor'):
+        professor = Professor.objects.get(id=request.POST.get('professor'))
+        try:
+            subject.professor_set.get(id=request.POST.get('professor'))
+            response = simplejson.dumps({'error':'O professor selecionado já pertence a esta matéria.'})
+        except:
+            subject.professor_set.add(professor)
+            template = "resources/add_professor_succes.html"
+            ctx['id_professor'] = professor.id
+            ctx['name_professor'] = professor.name
+            ctx['succes'] = 'True'
+            html = render_to_string(template,ctx)
+            ctx['html'] = html
+            response = simplejson.dumps(ctx)
+    #case 2: new professor, again we check the base consistency, if we get a positive answer, add the new professor to the base    
+    elif request.POST.get('name'):       
+        try:
+            Professor.objects.get(name=request.POST.get('name'),subject=subject)
+            response = simplejson.dumps({'error':'Este professor já pertence a esta matéria.'})
+        except:
+            professor = Professor.objects.create(name=request.POST.get('name'),info=request.POST.get('info'),collaborator=request.user)
+            subject.professor_set.add(professor)
+            template = "resources/add_professor_succes.html"
+            ctx['id_professor'] = professor.id
+            ctx['name_professor'] = professor.name
+            ctx['succes'] = 'True'
+            html = render_to_string(template,ctx)
+            ctx['html'] = html
+            response = simplejson.dumps(ctx)
+    #case 3: user hasn't filled the gaps neither select a professor.
+    else:
+        response = simplejson.dumps({'error':'Este campo é obrigatório.'})
+    #finally, return HttpResponse.
+    return HttpResponse(response, content_type = 'aplication/javascript; charset=utf8')
+
+def check_professor(request):
+    if request.POST.get('name'):
+        queryset = Professor.objects.all()
+        bits = request.POST.get('name').split(' ')
+        if len(bits)==1:
+            queryset = queryset.filter(name__icontains=bits[0]).values('id')
+        elif len(bits)>1:
+            q = Q(name__icontains=bits[0])
+            for bit in bits[1:]:
+                q.add(Q(name__icontains=bit), q.OR)
+            queryset = queryset.filter(q).values('id')
+        if queryset: 
+            form = CheckProfessorForm(queryset)
+            template = "resources/resource_check_professor.html"
+            html = render_to_string(template,{'form':form})
+            response = simplejson.dumps({'succes':'True','html':html})
+        else:
+            response = simplejson.dumps({'succes':'False'})
+            
+    else:
+        response = simplejson.dumps({'succes':'False'})
+    return HttpResponse(response, content_type = 'aplication/javascript; charset=utf8')
 @login_required
 def download(request, resource_slug):
     r = Resource.objects.get(slug = resource_slug)

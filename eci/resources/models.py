@@ -100,6 +100,7 @@ class Professor(models.Model):
         db_table='professor'
         verbose_name = 'Professor'
         verbose_name_plural = 'Professores'
+        
     
     def __unicode__(self):
         return self.name
@@ -144,13 +145,13 @@ class ActiveResourceManager(models.Manager):
         return super(ActiveResourceManager,self).get_query_set().filter(deleted=False)
     
 class Resource(models.Model):
+    file = models.FileField(upload_to="%Y-%m", storage=file_storage, verbose_name="Arquivo")
     title = models.CharField('Título',max_length='60')
     subject = models.ForeignKey(Subject,verbose_name="Matéria")
     professor = models.ForeignKey(Professor,blank=True,null=True)
     l_period = models.ForeignKey(Period,verbose_name='Período lecionado',blank=True,null=True)
     info = models.TextField('Informações',blank=True)
     slug = models.SlugField(max_length=60, unique=True,blank=True)
-    file = models.FileField(upload_to="%Y-%m", storage=file_storage, verbose_name="Arquivo")
     created = models.DateTimeField('Data de criação',auto_now_add=True)
     deleted = models.BooleanField(verbose_name="Indicador de exclusão", default=False)
     user_rate = models.ManyToManyField(User,through="ResourceRate")

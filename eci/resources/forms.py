@@ -88,3 +88,15 @@ class ResourceProfessorForm(forms.Form):
     def __init__(self,subject, *args, **kwargs):
         super(ResourceProfessorForm, self).__init__(*args, **kwargs)
         self.fields['professor'].queryset = Professor.objects.filter(professor_subjects = subject)
+
+class ProfessorForm(forms.ModelForm):
+    class Meta:
+        model = Professor
+        exclude =  ['slug','collaborator','created','deleted','user_rate','professor_subjects']
+
+class CheckProfessorForm(forms.Form):
+    professor = forms.ModelChoiceField(queryset=Professor.objects.all())
+    
+    def __init__(self,ids, *args, **kwargs):
+        super(CheckProfessorForm, self).__init__(*args, **kwargs)
+        self.fields['professor'].queryset = Professor.objects.filter(id__in=ids)

@@ -1,5 +1,29 @@
 {% extends "base.html" %}
-
+{% block script %}
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#id_name').bind("blur", function() {
+		$('#name_verify').fadeIn();
+		var name = {'name':$('#id_name').val()};
+		jQuery.post("/resources/check_professor/",name,
+			function(response){
+				if(response.succes == "True"){
+					$('#div_check_professor').remove(); 
+					$(response.html).insertAfter($("#p_name_error"));
+					$("#name_verify").fadeOut();
+				}
+				else{
+					$('#div_check_professor').remove(); 
+					$("#name_verify").fadeOut();
+				}
+			
+			},"json");
+	});
+	
+	
+});
+</script>
+{% endblock script %}
 {% block content %}
 <h1>Enviar material</h1>
 <form action="." method="post" enctype="multipart/form-data">
@@ -11,5 +35,25 @@
 	{% endfor %}
 	<input type="submit" class="submit" value="Enviar" />
 </form>
-	
+
+<div style="display:none;">
+	<div id="professor_div" style="padding:20px;">
+		<h1>Adicionar novo Professor</h1><br />
+		<p>Caso o Professor que você precise não exista,ou não está atrelado a esta matéria, colabore com o site adicionando-o.</p>
+		<p>Matéria: <span id="add_professor_subject"></span></p>
+		<form method="post" action="." id="add_professor_form">
+		<input id="add_professor_subject_input" type="hidden" name="subject" value="" />
+		{% csrf_token %}
+		{% for field in professor_form %}
+		<label>
+			<span>{{ field.label }}{% if field.field.required %}<span class="req">**</span>{% endif %}</span>  {{ field }}{% if field.label == 'Nome' %}<span id="name_verify" style="display:none;" class="error"> Verificando consistência...</span>{% endif %}  {% for error in field.errors %}<p class="error">{{ error }}</p>{% endfor %}
+		</label>
+		{% if field.label == 'Nome' %} 
+		<p id="p_name_error" class="error"></p>
+		{% endif %}
+		{% endfor %}
+		<input style="margin:20px 0 0 0;" type="submit" class="submit" value="Adicionar" />
+		</form>
+	</div>
+</div>
 {% endblock %}
