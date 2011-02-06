@@ -13,11 +13,7 @@ function addRating(type){
 			
 			},"json");
 		}; 
-
-$(document).ready(function(){
-	//fancybox add_professor_form POST logic
-	$("#add_professor_form").bind("submit", function() {
-				if (!$('#name_verify').is(":visible")) {
+function addProfessorForm() {
 					var form_data = $('#add_professor_form').serialize();
 					jQuery.post("/resources/add_professor/", form_data, function(response){
 						if (response.succes == "True") {
@@ -33,10 +29,14 @@ $(document).ready(function(){
 						}
 					}, "json");
 					
-				}
+				
 					return false;
 				
-				});
+				}
+$(document).ready(function(){
+	
+	//fancybox add_professor_form POST logic
+	$("#add_professor_form").bind("submit",addProfessorForm );
 	
 	//Add professor field
 	$('#id_subject').change(

@@ -16,7 +16,7 @@
 </select> <input onclick="addRating('professor')" id="id_submit" type="button" value="Enviar" /></p>
 <input type="hidden" value="{{ professor.slug }}" id="id_slug" />
 {% endif %}
-
+{% if not professor.collaborator.is_staff %}<p><strong>Colaborador </strong>{{ professor.collaborator }}</p>{% endif %}
 <p><strong>Info </strong>{{ professor.info }}</p>
 <table id="box-table-a" summary="Materias">
     <thead>

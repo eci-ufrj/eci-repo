@@ -1,9 +1,37 @@
 {% extends "base.html" %}
 {% block script %}
 <script type="text/javascript">
+function addProfessorForm() {
+				var form_data = $('#add_professor_form').serialize();
+				jQuery.post("/resources/add_professor/", form_data, function(response){
+					if (response.succes == "True") {
+						$('#professor_div').slideUp();
+						$(response.html).insertAfter($("#professor_div"));
+						$('#add_professor_succes').slideDown();
+					}
+					if (response.succes == "True") {
+						$('#id_professor').append($('<option></option>').val(response.id_professor).html(response.name_professor));
+					}
+					if (response.error) {
+						$('#p_name_error').html(response.error);
+					}
+				}, "json");
+				
+			
+				return false;
+			
+			}
 $(document).ready(function(){
+	function stopSubmit(){
+		return false;
+	}
+	$('#id_name').click(function(){
+		$("#add_professor_form").unbind();	
+	$("#add_professor_form").bind("submit",stopSubmit );	
+	})
 	$('#id_name').bind("blur", function() {
 		$('#name_verify').fadeIn();
+		
 		var name = {'name':$('#id_name').val()};
 		jQuery.post("/resources/check_professor/",name,
 			function(response){
@@ -18,7 +46,9 @@ $(document).ready(function(){
 				}
 			
 			},"json");
+		//$("#add_professor_form").bind("submit",addProfessorForm );
 	});
+	$('#add_professor_form').ajaxStop(function(){$(this).bind("submit",addProfessorForm );})
 	
 	
 });
@@ -52,7 +82,7 @@ $(document).ready(function(){
 		<p id="p_name_error" class="error"></p>
 		{% endif %}
 		{% endfor %}
-		<input style="margin:20px 0 0 0;" type="submit" class="submit" value="Adicionar" />
+		<input style="margin:20px 0 0 0;" type="submit" class="submit" value="Adicionar" id="submit_add_professor"/>
 		</form>
 	</div>
 </div>
