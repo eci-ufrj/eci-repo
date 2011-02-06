@@ -21,6 +21,7 @@ from django.http import Http404
 import os, tempfile, zipfile
 import StringIO
 import codecs
+from django.utils.translation import ugettext_lazy as _
 
 @login_required
 def show_subject(request,subject_slug,template_name="resources/subject.html"):
@@ -202,6 +203,7 @@ def show_professors(request,template_name="resources/professors.html"):
 @login_required
 def results(request,template_name="resources.html"):
     q = request.GET.get('q','')
+    q = _(unicode(q))
     try:
         page = int(request.GET.get('page',1))
     except ValueError:
