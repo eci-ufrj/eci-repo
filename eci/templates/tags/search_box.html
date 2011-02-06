@@ -1,4 +1,4 @@
 <h4>Busca</h4>
-<form id="search" action="{% url search_results %}" method="get">
+<form id="search" action="{% url search_results %}" method="get" onsubmit="this.submit();return false;">
 		<input type="text" value="Buscar.." onfocus="if (this.value=='Buscar..')this.value=''" id="q" name="q" /><input type="image" id="lupa" src="{{ MEDIA_URL }}images/lupa.png" name="submit" alt="Busca" />
 </form>		

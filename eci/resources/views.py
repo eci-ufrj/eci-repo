@@ -223,7 +223,7 @@ def results(request,template_name="resources.html"):
         results = paginator.page(page).object_list
     except (InvalidPage,EmptyPage):
         results = paginator.page(1).object_list
-    page_title = 'Resultados da Busca para:'+q
+    page_title = _(u'Resultados da Busca para:')+q
     return render_to_response(template_name,locals(),context_instance=RequestContext(request))
 
 @login_required
