@@ -203,7 +203,7 @@ def show_professors(request,template_name="resources/professors.html"):
 @login_required
 def results(request,template_name="resources.html"):
     q = request.GET.get('q','')
-    q = _(unicode(q))
+    q = unicode(q)
     try:
         page = int(request.GET.get('page',1))
     except ValueError:
@@ -223,7 +223,8 @@ def results(request,template_name="resources.html"):
         results = paginator.page(page).object_list
     except (InvalidPage,EmptyPage):
         results = paginator.page(1).object_list
-    page_title = _(u'Resultados da Busca para:')+q
+    string = u'Resultados da Busca para:'+ q
+    page_title = _(unicode(string))
     return render_to_response(template_name,locals(),context_instance=RequestContext(request))
 
 @login_required
