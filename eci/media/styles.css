@@ -478,6 +478,11 @@ hr{
 	text-decoration:blink;
 	display:none;	
 }
+
+.no_decoration{
+	text-decoration:none;
+	color:#003399;
+}
 /* graph test */
 .graphtable td { vertical-align: top; font-family: Arial, Helvetica, sans-serif; }
  .graphtable label { display: block; width: 1^65px; height: 25px; font-size: 13px; padding-left: 35px; }

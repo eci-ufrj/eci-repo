@@ -1,18 +1,18 @@
 {% extends "base.html" %}
-
+{% load filters %}
 {% block content %}
 <h1>Matérias</h1>
 <br />
 <table id="box-table-a" summary="Materias">
     <thead>
     	<tr>
-        	<th scope="col">Matérias</th>
-			<th scope="col">Qualidade</th>
-            <th scope="col">Período</th>
-			<th scope="col">Tipo</th>
-            <th scope="col">Arquivos</th>
-			<th scope="col">Professores</th>
-			<th scope="col">Comentários</th>
+        	<th scope="col"><a class="no_decoration" href="?order_field=name&order_dir={% if order_dir == "asc" and order_field == "name" %}desc{% else %}asc{% endif %}">Matérias</a></th>
+			<th scope="col"><a class="no_decoration" href="?order_field=rate&order_dir={% if order_dir == "desc"  and order_field == "rate"  %}asc{% else %}desc{% endif %}">Qualidade</a></th>
+            <th scope="col"><a class="no_decoration" href="?order_field=period&order_dir={% if order_dir == "asc"  and order_field == "period"  %}desc{% else %}asc{% endif %}">Período</a></th>
+			<th scope="col"><a class="no_decoration" href="?order_field=type&order_dir={% if order_dir == "desc"  and order_field == "type"  %}asc{% else %}desc{% endif %}">Tipo</a></th>
+            <th scope="col"><a class="no_decoration" href="?order_field=file&order_dir={% if order_dir == "desc"  and order_field == "file"  %}asc{% else %}desc{% endif %}">Arquivos</a></th>
+			<th scope="col"><a class="no_decoration" href="?order_field=professor&order_dir={% if order_dir == "desc"  and order_field == "professor"  %}asc{% else %}desc{% endif %}">Professores</a></th>
+			<th scope="col"><a class="no_decoration" href="?order_field=comment&order_dir={% if order_dir == "desc"  and order_field == "comment"  %}asc{% else %}desc{% endif %}">Comentários</a></th>
 			
         </tr>
     </thead>
@@ -20,7 +20,7 @@
     	{% for s in subjects %}
     	<tr>
         	<td><a href="{{ s.get_absolute_url }}">{{ s.name }}</a></td>
-			<td>{{ s.nota }}</td>
+			<td>{{ s.nota|none_value }}</td>
             <td>{{ s.get_period_display }}</td>
 			<td>Obrigatória</td>
             <td>{{ s.resource_set.all.count }}</td>

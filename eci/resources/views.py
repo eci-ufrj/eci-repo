@@ -5,6 +5,7 @@ from django.template import RequestContext
 from django.core import urlresolvers
 from django.http import HttpResponseRedirect
 from django.db.models import Q
+from django.db.models.aggregates import Avg,Count
 from eci.resources import utils
 from django.core.paginator import Paginator,InvalidPage, EmptyPage
 from eci import settings
@@ -138,6 +139,46 @@ def show_resource(request,resource_slug,template_name="resources/resource.html")
 @login_required
 def show_subjects(request,template_name="resources/subjects.html"):
     subjects = Subject.objects.filter(deleted=False).order_by('period')
+    if request.GET.get('order_field'):
+        order_field = request.GET.get('order_field')
+        order_dir = request.GET.get('order_dir', 'asc')
+        
+        if order_field == 'name':
+            if order_dir == 'asc':
+                subjects = subjects.order_by('name')
+            else:
+                subjects = subjects.order_by('-name')
+        elif order_field == 'rate':
+            if order_dir == 'asc':
+                subjects = subjects.annotate(nota = Avg('subjectrate__rate')).order_by('nota')
+            else:
+                subjects = subjects.annotate(nota = Avg('subjectrate__rate')).order_by('-nota')
+        elif order_field == 'period':
+            if order_dir == 'asc':
+                subjects = subjects.order_by('period')
+            else:
+                subjects = subjects.order_by('-period')
+        elif order_field == 'type':
+            if order_dir == 'asc':
+                subjects = subjects.order_by('type')
+            else:
+                subjects = subjects.order_by('-type')
+        elif order_field == 'file':
+            if order_dir == 'asc':
+                subjects = subjects.annotate(files=Count('resource')).order_by('files')
+            else:
+                subjects = subjects.annotate(files=Count('resource')).order_by('-files')
+        elif order_field == 'professor':
+            if order_dir == 'asc':
+                subjects = subjects.annotate(professors=Count('professor')).order_by('professors')
+            else:
+                subjects = subjects.annotate(professors=Count('professor')).order_by('-professors')
+        elif order_field == 'comment':
+            if order_dir == 'asc':
+                subjects = subjects.annotate(comments=Count('comments')).order_by('comments')
+            else:
+                subjects = subjects.annotate(comments=Count('comments')).order_by('-comments')
+            
     page_title = "Materias"
     return render_to_response(template_name,locals(),context_instance=RequestContext(request))
 
@@ -208,7 +249,7 @@ def add_resource(request,template_name="resource_form.html"):
             url = urlresolvers.reverse('resources_resource', args=[new.slug])
             return HttpResponseRedirect(url)
     return render_to_response(template_name,locals(),context_instance=RequestContext(request))
-
+ 
 @login_required
 def add_rating(request,object):
     form = get_rate_form(object)(request.POST)
