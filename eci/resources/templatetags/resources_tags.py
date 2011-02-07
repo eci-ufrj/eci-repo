@@ -53,7 +53,10 @@ def top_collaborators():
 
 @register.inclusion_tag('tags/pagination_links.html')
 def pagination_links(request,paginator):
-    raw_params = request.GET.copy()
+    import unicodedata
+    copy = request.GET.copy()
+    copy['q'] = unicodedata.normalize('NFKD', copy['q']).encode('ascii', 'ignore')
+    raw_params = copy
     page = raw_params.get('page',1)
     p = paginator.page(page)
     try:
