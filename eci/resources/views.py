@@ -179,13 +179,43 @@ def show_subjects(request,template_name="resources/subjects.html"):
                 subjects = subjects.annotate(comments=Count('comments')).order_by('comments')
             else:
                 subjects = subjects.annotate(comments=Count('comments')).order_by('-comments')
+        
             
     page_title = "Materias"
     return render_to_response(template_name,locals(),context_instance=RequestContext(request))
 
 @login_required
 def show_professors(request,template_name="resources/professors.html"):
-    professors = Professor.objects.filter(deleted=False).order_by('name')
+    professors = Professor.objects.filter(deleted=False)
+    if request.GET.get('order_field'):
+        order_field = request.GET.get('order_field')
+        order_dir = request.GET.get('order_dir', 'asc')
+        
+        if order_field == 'name':
+            if order_dir == 'asc':
+                professors = professors.order_by('name')
+            else:
+                professors = professors.order_by('-name')
+        elif order_field == 'rate':
+            if order_dir == 'asc':
+                professors = professors.annotate(nota = Avg('professorrate__rate')).order_by('nota')
+            else:
+                professors = professors.annotate(nota = Avg('professorrate__rate')).order_by('-nota')
+        elif order_field == 'subject':
+            if order_dir == 'asc':
+                professors = professors.annotate(subjects=Count('professor_subjects')).order_by('subjects')
+            else:
+                professors = professors.annotate(subjects=Count('professor_subjects')).order_by('-subjects')
+        elif order_field == 'file':
+            if order_dir == 'asc':
+                professors = professors.annotate(filess=Count('resource')).order_by('filess')
+            else:
+                professors = professors.annotate(filess=Count('resource')).order_by('-filess')
+        elif order_field == 'comment':
+            if order_dir == 'asc':
+                professors = professors.annotate(commentss=Count('comments')).order_by('commentss')
+            else:
+                professors = professors.annotate(commentss=Count('comments')).order_by('-commentss')
     page_title = "Professores"
     try:
         page = int(request.GET.get('page',1))

@@ -55,7 +55,11 @@ def top_collaborators():
 def pagination_links(request,paginator):
     import unicodedata
     copy = request.GET.copy()
-    copy['q'] = unicodedata.normalize('NFKD', copy['q']).encode('ascii', 'ignore')
+    #try:
+        #copy['q'] = unicodedata.normalize('NFKD', copy['q']).encode('ascii', 'ignore')
+    #    copy['q'] = copy['q'].encode('ascii', 'ignore')
+    #except:
+    #    pass
     raw_params = copy
     page = raw_params.get('page',1)
     p = paginator.page(page)
@@ -63,7 +67,14 @@ def pagination_links(request,paginator):
         del raw_params['page']
     except KeyError:
         pass
-    params = urllib.urlencode(raw_params)
+    l =[]
+    for key,value in copy.items():
+        string = ''
+        value = value.replace(' ','+')
+        string+= key+'='+value
+        l.append(string)
+    params = '&'.join(l)
+    #params = urllib.urlencode(raw_params)
     return {'request':request,
             'paginator':paginator,
             'p':p,

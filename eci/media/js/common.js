@@ -45,6 +45,8 @@ $(document).ready(function(){
 			subject: $("#id_subject").val(),
 		};
 		$('#div_loading').slideDown();
+		$('<div id="ajax-loader"><img src="/media/images/ajax-loader.gif"></div>').insertAfter($("#id_subject"))
+		$('#ajax-loader').ajaxStop(function(){$(this).fadeOut()});
 		jQuery.post("/resources/add_resource_professor/",subject,
 			function(response){
 				if(response.succes == "True"){
@@ -67,7 +69,7 @@ $(document).ready(function(){
 		});    
 	
 	/*function statusBox(){
-		$('<div id="loading">Carregando...</div>').insertAfter($("#id_subject"))
+		$('<div id="loading"><img src="/media/images/ajax-loading.gif" /></div>').insertAfter($("#id_subject"))
 		.ajaxStart(function(){$(this).show();})
 		.ajaxStop(function(){$(this).hide();})
 		
