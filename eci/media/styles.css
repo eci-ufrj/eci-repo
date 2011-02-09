@@ -331,7 +331,7 @@ span.required {
 #box-table-a
 {
 	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-	font-size: 15px;
+	font-size: 14px;
 	width: 680px;
 	text-align: left;
 	border-collapse: collapse;
@@ -482,6 +482,9 @@ hr{
 .no_decoration{
 	text-decoration:none;
 	color:#003399;
+}
+#submit_add_professor{
+	background-color:#c0c0c0;
 }
 /* graph test */
 .graphtable td { vertical-align: top; font-family: Arial, Helvetica, sans-serif; }
