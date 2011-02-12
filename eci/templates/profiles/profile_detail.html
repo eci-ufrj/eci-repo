@@ -30,7 +30,7 @@
     	{% for r in profile.user.resource_collaborator.all %}
     	<tr>
         	<td><a href="{{ r.get_absolute_url }}">{{ r.title }}</a></td>
-			<td>{{ r.subject }}</td>
+			<td><a href="{{ r.subject.get_absolute_url }}">{{ r.subject }}</a></td>
             <td>{{ r.l_period }}</td>
 			<td>{{ r.nota }}</td>
 			<td>{{ r.comments_set.all.count }}</td>

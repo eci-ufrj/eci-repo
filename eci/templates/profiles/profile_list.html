@@ -7,16 +7,17 @@
 <table id="box-table-a" summary="Materias">
     <thead>
     	<tr>
-        	<th scope="col">Usuário</th>
-			<th scope="col">Nome</th>
-            <th scope="col">Ano</th>
+        	<th scope="col"><a class="no_decoration" href="?order_field=username&order_dir={% if order_dir == "asc" and order_field == "username" %}desc{% else %}asc{% endif %}">Usuário</a></th>
+			<th scope="col"><a class="no_decoration" href="?order_field=name&order_dir={% if order_dir == "asc" and order_field == "name" %}desc{% else %}asc{% endif %}">Nome</a></th>
+            <th scope="col"><a class="no_decoration" href="?order_field=year&order_dir={% if order_dir == "desc"  and order_field == "year"  %}asc{% else %}desc{% endif %}">Ano</a></th>
 			<th scope="col">Website</th>
-			<th scope="col">Colaborações</th>
+			<th scope="col"><a class="no_decoration" href="?order_field=resources&order_dir={% if order_dir == "desc"  and order_field == "resources"  %}asc{% else %}desc{% endif %}">Colaborações</a></th>
 			
         </tr>
     </thead>
     <tbody>
     	{% for p in object_list %}
+		{% if p.user.is_active %}
     	<tr>
         	<td><a {% if p.user.is_staff %}style="color:Red;"{% endif %} href="{{ p.get_absolute_url }}">{{p.user.username }}</a></td>
 			<td>{{ p.nome }}</td>
@@ -25,6 +26,7 @@
 			<td>{{ p.user.resource_collaborator.all.count }}</td>
 
         </tr>
+		{% endif %}
 		{% endfor %}
     </tbody>
 </table>

@@ -10,6 +10,7 @@ from django.contrib import admin
 from django.db.models.signals import post_save
 from django.db.models import Count
 from django.template.loader import render_to_string
+from django.core.mail import send_mail
 import utils
 
 
@@ -325,7 +326,7 @@ class Comments(models.Model):
     date_comment = models.DateTimeField('Dia e hora',auto_now_add=True)
 
     def __unicode__(self):
-        return unicode('Comentário de ')+unicode(self.author.username)+unicode(' as ')+unicode(self.date_comment)
+        return unicode('Comentado por ')+unicode(self.author.username)+unicode(' as ')+unicode(self.date_comment)
     
     class Meta:
         verbose_name = "Comentário"
@@ -353,6 +354,14 @@ def on_user_register(sender, **kwargs):
                 message = render_to_string('registration/activation_email.txt',
                                            ctx_dict)
                 user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
+                
+                admins = User.objects.filter(is_staff=True)
+                for admin in admins:
+                    message_admin = 'O usuário %s de e-mail %s criou uma nova conta no Repositório ECI.' %(user.username,user.email)
+                    send_mail('Repositório ECI - Nova conta aguardando aceitação',
+                              message_admin,
+                              settings.DEFAULT_FROM_EMAIL,
+                              [admin.email], fail_silently=True)
         
         
 

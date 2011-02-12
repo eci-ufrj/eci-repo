@@ -13,7 +13,7 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
-
+from django.db.models.aggregates import Avg,Count
 from profiles import utils
 
 
@@ -333,5 +333,29 @@ def profile_list(request, public_profile_field=None,
     queryset = profile_model._default_manager.all()
     if public_profile_field is not None:
         queryset = queryset.filter(**{ public_profile_field: True })
+    if request.GET.get('order_field'):
+        order_field = request.GET.get('order_field')
+        order_dir = request.GET.get('order_dir', 'asc')
+        
+        if order_field == 'username':
+            if order_dir == 'asc':
+                queryset = queryset.order_by('user__username')
+            else:
+                queryset = queryset.order_by('-user__username')
+        if order_field == 'name':
+            if order_dir == 'asc':
+                queryset = queryset.order_by('nome')
+            else:
+                queryset = queryset.order_by('-nome')
+        if order_field == 'year':
+            if order_dir == 'asc':
+                queryset = queryset.order_by('year')
+            else:
+                queryset = queryset.order_by('-year')
+        if order_field == 'resources':
+            if order_dir == 'asc':
+                queryset = queryset.annotate(resources=Count('user__resource_collaborator')).order_by('resources')
+            else:
+                queryset = queryset.annotate(resources=Count('user__resource_collaborator')).order_by('-resources')
     kwargs['queryset'] = queryset
     return object_list(request, template_name=template_name, **kwargs)

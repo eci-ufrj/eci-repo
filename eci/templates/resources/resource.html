@@ -21,7 +21,7 @@
 <input type="hidden" value="{{ resource.slug }}" id="id_slug" />
 {% endif %}
 <p><strong>Matéria </strong><a href="{{ resource.subject.get_absolute_url }}">{{ resource.subject.name }}</a></p>
-<p><strong>Professor </strong>{% if resource.professor %}{{ resource.professor.name }}{% else %}Padrão ou não informado{% endif %}</p>
+<p><strong>Professor </strong>{% if resource.professor %}<a href="{{ resource.professor.get_absolute_url }}">{{ resource.professor.name }}</a>{% else %}Padrão ou não informado{% endif %}</p>
 <p><strong>Período lecionado </strong>{{ resource.l_period }}</p>
 <p><strong>Downloads </strong>{{ resource.resource_hit.all.count }}</p>
 <p><strong>Info </strong>{{ resource.info }}</p>
