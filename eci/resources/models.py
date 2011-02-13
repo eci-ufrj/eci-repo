@@ -357,7 +357,7 @@ def on_user_register(sender, **kwargs):
                 
                 admins = User.objects.filter(is_staff=True)
                 for admin in admins:
-                    message_admin = 'O usuário %s de e-mail %s criou uma nova conta no Repositório ECI.' %(user.username,user.email)
+                    message_admin = u'O usuário %s de e-mail %s criou uma nova conta no Repositório ECI.' %(user.username,user.email)
                     send_mail('Repositório ECI - Nova conta aguardando aceitação',
                               message_admin,
                               settings.DEFAULT_FROM_EMAIL,
